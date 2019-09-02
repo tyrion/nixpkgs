@@ -2,18 +2,18 @@
 , desktop-file-utils, python3, wrapGAppsHook , gtk3, gnome3, gnome-autoar
 , glib-networking, shared-mime-info, libnotify, libexif, libseccomp , exempi
 , librsvg, tracker, tracker-miners, gexiv2, libselinux, gdk-pixbuf
-, substituteAll, bubblewrap, gst_all_1, gsettings-desktop-schemas
+, substituteAll, gnome-desktop, gst_all_1, gsettings-desktop-schemas
 }:
 
 let
   pname = "nautilus";
-  version = "3.32.3";
+  version = "3.34.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1x9crzbj6rrrf8w5dkcx0c14j40byr4ijpzkwd5dcrbfvvdy1r01";
+    sha256 = "1ncs5hmaxjb9p2yzj81m7dz2x27vzmvppir3058dk236jzn98r36";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     glib-networking shared-mime-info libexif gtk3 exempi libnotify libselinux
-    tracker tracker-miners gexiv2 libseccomp bubblewrap gst_all_1.gst-plugins-base
+    tracker tracker-miners gexiv2 libseccomp gnome-desktop gst_all_1.gst-plugins-base
     gnome3.adwaita-icon-theme gsettings-desktop-schemas
   ];
 
@@ -44,13 +44,6 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./extension_dir.patch
-    # 3.30 now generates it's own thummbnails,
-    # and no longer depends on `gnome-desktop`
-    (substituteAll {
-      src = ./bubblewrap-paths.patch;
-      bubblewrap_bin = "${bubblewrap}/bin/bwrap";
-      inherit (builtins) storeDir;
-    })
   ];
 
   passthru = {
