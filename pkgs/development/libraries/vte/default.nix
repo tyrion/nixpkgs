@@ -1,22 +1,24 @@
-{ stdenv, fetchurl, intltool, pkgconfig
+{ stdenv, fetchurl, gettext, pkgconfig, meson, ninja
 , gnome3, glib, gtk3, ncurses, gobject-introspection, vala, libxml2, gnutls
 , gperf, pcre2
 }:
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.56.3";
+  version = "0.58.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0j166gic5znssdb9r45qazq4kb4v9fial82czand5wa8i2yd988p";
+    sha256 = "0ifvza9sdrkxxqq7m9i7ry23sv7widjz6nzbvgc60kpph4fmf187";
   };
 
   passthru = {
     updateScript = gnome3.updateScript { packageName = pname; };
   };
 
-  nativeBuildInputs = [ gobject-introspection intltool pkgconfig vala gperf libxml2 ];
+  nativeBuildInputs = [
+    meson ninja gobject-introspection gettext pkgconfig vala gperf libxml2
+  ];
   buildInputs = [ glib gtk3 ncurses ];
 
   propagatedBuildInputs = [
@@ -28,7 +30,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs .";
 
-  configureFlags = [ "--enable-introspection" "--disable-Bsymbolic" ];
+  mesonFlags = [
+  ];
 
   enableParallelBuilding = true;
 
@@ -48,4 +51,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
-
