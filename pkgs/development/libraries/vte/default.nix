@@ -1,11 +1,28 @@
-{ stdenv, fetchurl, gettext, pkgconfig, meson, ninja
-, gnome3, glib, gtk3, ncurses, gobject-introspection, vala, libxml2, gnutls
-, gperf, pcre2
+{ stdenv
+, fetchurl
+, gettext
+, pkgconfig
+, meson
+, ninja
+, gnome3
+, glib
+, gtk3
+, gobject-introspection
+, vala
+, libxml2
+, gnutls
+, gperf
+, pango
+, pcre2
+, fribidi
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "vte";
   version = "0.58.0";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -17,23 +34,34 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja gobject-introspection gettext pkgconfig vala gperf libxml2
+    gettext
+    gobject-introspection
+    gperf
+    libxml2
+    meson
+    ninja
+    pkgconfig
+    vala
   ];
-  buildInputs = [ glib gtk3 ncurses ];
+
+  buildInputs = [
+    fribidi
+    gnutls
+    pcre2
+    zlib
+  ];
 
   propagatedBuildInputs = [
     # Required by vte-2.91.pc.
     gtk3
-    gnutls
-    pcre2
+    glib
+    pango
   ];
 
-  preConfigure = "patchShebangs .";
-
-  mesonFlags = [
-  ];
-
-  enableParallelBuilding = true;
+  postPatch = ''
+    patchShebangs perf/*
+    patchShebangs src/box_drawing_generate.sh
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://www.gnome.org/;
@@ -48,6 +76,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2;
     maintainers = with maintainers; [ astsmtl antono lethalman ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }
