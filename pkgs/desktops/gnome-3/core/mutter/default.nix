@@ -55,6 +55,11 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    (fetchpatch {
+      name = "ensure-emit-x11-display-opened.patch";
+      url = "https://gitlab.gnome.org/GNOME/mutter/commit/850ef518795dcc20d3b9a4f661f70ff8d0ddacb2.patch";
+      sha256 = "0cxdbrbcc8kfkvw7ryxjm2v1vk15jki7bawn128385r5hasabhxf";
+    })
     (substituteAll {
       src = ./fix-paths.patch;
       inherit zenity;
