@@ -236,7 +236,7 @@ in
       services.gvfs.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.telepathy.enable = mkDefault true;
-      systemd.packages = [ pkgs.gnome3.vino ];
+      systemd.packages = with pkgs.gnome3; [ vino gnome-session ];
 
       services.avahi.enable = mkDefault true;
 
