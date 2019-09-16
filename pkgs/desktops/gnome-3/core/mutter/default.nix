@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dxwayland-path=${xwayland}/bin/Xwayland"
     "-Dinstalled_tests=false" # TODO: enable these
-    "-Dsysprof_dbus_interfaces_dir=${sysprof}/share/dbus-1/interfaces"
   ];
 
   propagatedBuildInputs = [
@@ -61,7 +60,7 @@ stdenv.mkDerivation rec {
       sha256 = "0cxdbrbcc8kfkvw7ryxjm2v1vk15jki7bawn128385r5hasabhxf";
     })
    # TODO: submit upstream
-   ./0001-build-add-sysprof_dbus_inferfaces_dir-option.patch
+   ./0001-build-use-get_pkgconfig_variable-for-sysprof-dbusdir.patch
     (substituteAll {
       src = ./fix-paths.patch;
       inherit zenity;
