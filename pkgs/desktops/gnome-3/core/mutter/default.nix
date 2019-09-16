@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dxwayland-path=${xwayland}/bin/Xwayland"
     "-Dinstalled_tests=false" # TODO: enable these
-    "-Dprofiler=false"
+    "-Dsysprof_dbus_interfaces_dir=${sysprof}/share/dbus-1/interfaces"
   ];
 
   propagatedBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     geocode-glib libinput libgudev libwacom
     libcanberra-gtk3 zenity xkeyboard_config libxkbfile
     libxkbcommon pipewire xwayland
-    gnome-settings-daemon # sysprof
+    gnome-settings-daemon sysprof
   ];
 
   patches = [
@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/mutter/commit/850ef518795dcc20d3b9a4f661f70ff8d0ddacb2.patch";
       sha256 = "0cxdbrbcc8kfkvw7ryxjm2v1vk15jki7bawn128385r5hasabhxf";
     })
+   # TODO: submit upstream
+   ./0001-build-add-sysprof_dbus_inferfaces_dir-option.patch
     (substituteAll {
       src = ./fix-paths.patch;
       inherit zenity;

@@ -1,0 +1,52 @@
+From e2370c393108e9dbe2ad81c87ecf5426f4178564 Mon Sep 17 00:00:00 2001
+From: worldofpeace <worldofpeace@protonmail.ch>
+Date: Mon, 16 Sep 2019 10:32:24 -0400
+Subject: [PATCH] build: add sysprof_dbus_inferfaces_dir option
+
+This is needed for distro's that install packages
+into separate independent prefix's, so datadir
+will not be Sysprof's prefix breaking the build
+as the file is nonexistent.
+---
+ meson_options.txt | 6 ++++++
+ src/meson.build   | 7 ++++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/meson_options.txt b/meson_options.txt
+index 73aa7adde..8247ad06c 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -129,6 +129,12 @@ option('profiler',
+   description: 'Enable Sysprof tracing'
+ )
+ 
++option('sysprof_dbus_interfaces_dir',
++  type: 'string',
++  value: '',
++  description: 'Path to Sysprof DBus interfaces directory'
++)
++
+ option('installed_tests',
+   type: 'boolean',
+   value: true,
+diff --git a/src/meson.build b/src/meson.build
+index 182f7f5f5..89e3dc112 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -710,7 +710,12 @@ if have_profiler
+     'backends/meta-profiler.h',
+   ]
+ 
+-  dbus_interfaces_dir = join_paths(datadir, 'dbus-1', 'interfaces')
++  dbus_interfaces_dir = get_option('sysprof_dbus_interfaces_dir')
++
++  if dbus_interfaces_dir == ''
++    dbus_interfaces_dir = join_paths(datadir, 'dbus-1', 'interfaces')
++  endif
++
+   sysprof3_dbus_file = join_paths(dbus_interfaces_dir, 'org.gnome.Sysprof3.Profiler.xml')
+ 
+   dbus_sysprof3_profiler_built_sources = gnome.gdbus_codegen('meta-dbus-sysprof3-profiler',
+-- 
+2.22.1
+
