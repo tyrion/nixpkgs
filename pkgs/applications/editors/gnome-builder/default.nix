@@ -1,4 +1,4 @@
-{ gcc8Stdenv
+{ stdenv
 , ctags
 , appstream-glib
 , desktop-file-utils
@@ -23,6 +23,7 @@
 , ninja
 , ostree
 , pcre
+, pcre2
 , pkgconfig
 , python3
 , sysprof
@@ -36,11 +37,6 @@
 , glib
 }:
 
-let
-  # Does not build with GCC 7
-  # https://gitlab.gnome.org/GNOME/gnome-builder/issues/868
-  stdenv = gcc8Stdenv;
-in
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
   version = "3.34.0";
@@ -83,6 +79,7 @@ stdenv.mkDerivation rec {
     libxml2
     ostree
     pcre
+    pcre2
     python3
     sysprof
     template-glib
