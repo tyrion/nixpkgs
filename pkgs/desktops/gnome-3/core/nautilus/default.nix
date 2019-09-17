@@ -1,33 +1,77 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2
-, desktop-file-utils, python3, wrapGAppsHook , gtk3, gnome3, gnome-autoar
-, glib-networking, shared-mime-info, libnotify, libexif, libseccomp , exempi
-, librsvg, tracker, tracker-miners, gexiv2, libselinux, gdk-pixbuf
-, substituteAll, gnome-desktop, gst_all_1, gsettings-desktop-schemas
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gettext
+, libxml2
+, desktop-file-utils
+, python3
+, wrapGAppsHook
+, gtk3
+, gnome3
+, gnome-autoar
+, glib-networking
+, shared-mime-info
+, libnotify
+, libexif
+, libseccomp
+, exempi
+, librsvg
+, tracker
+, tracker-miners
+, gexiv2
+, libselinux
+, gdk-pixbuf
+, substituteAll
+, gnome-desktop
+, gst_all_1
+, gsettings-desktop-schemas
+, gobject-introspection
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "nautilus";
   version = "3.34.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1ncs5hmaxjb9p2yzj81m7dz2x27vzmvppir3058dk236jzn98r36";
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig libxml2 gettext python3 wrapGAppsHook
     desktop-file-utils
+    gettext
+    gobject-introspection
+    libxml2
+    meson
+    ninja
+    pkgconfig
+    python3
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    glib-networking shared-mime-info libexif gtk3 exempi libnotify libselinux
-    tracker tracker-miners gexiv2 libseccomp gnome-desktop gst_all_1.gst-plugins-base
-    gnome3.adwaita-icon-theme gsettings-desktop-schemas
+    exempi
+    gexiv2
+    glib-networking
+    gnome-desktop
+    gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas
+    gst_all_1.gst-plugins-base
+    gtk3
+    libexif
+    libnotify
+    libseccomp
+    libselinux
+    shared-mime-info
+    tracker
+    tracker-miners
   ];
 
-  propagatedBuildInputs = [ gnome-autoar ];
+  propagatedBuildInputs = [
+    gnome-autoar
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
