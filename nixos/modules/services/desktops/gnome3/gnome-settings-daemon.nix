@@ -38,21 +38,7 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    systemd.packages = [ cfg.package ];
-
     services.udev.packages = [ cfg.package ];
-
-    systemd.user.targets."gnome-session-initialized".wants = [
-      "gsd-a11y-settings.target" "gsd-housekeeping.target" "gsd-power.target"
-      "gsd-color.target" "gsd-keyboard.target" "gsd-print-notifications.target"
-      "gsd-datetime.target" "gsd-media-keys.target" "gsd-rfkill.target"
-      "gsd-screensaver-proxy.target" "gsd-sound.target" "gsd-smartcard.target"
-      "gsd-sharing.target" "gsd-wacom.target" "gsd-wwan.target"
-    ];
-
-    systemd.user.targets."gnome-session-x11-services".wants = [
-      "gsd-xsettings.target"
-    ];
 
   };
 
